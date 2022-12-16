@@ -2,15 +2,23 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 
 import Deck from "./models/Deck";
+import { config } from "dotenv";
 
+config();
 const PORT = 5001;
 
 const app = express();
 
-app.post("/decks", (req: Request, res: Response) => {
+app.get("/hello", (req: Request, res: Response) => {
   res.send("hello world");
+});
+
+//Express middleware function
+app.use(express.json());
+
+app.post("/decks", async (req: Request, res: Response) => {
   const newDeck = new Deck({
-    title: "my awesome flascard deck",
+    title: req.body.title,
   });
   const createDeck = await newDeck.save();
   res.json(createDeck);
@@ -19,9 +27,7 @@ app.post("/decks", (req: Request, res: Response) => {
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(
-    "mongodb+srv://darrenwayn:AUffP5SZ93gGH3e2@cluster0.tsg4hsp.mongodb.net/?retryWrites=true&w=majority"
-  )
+  .connect(process.env.MONGO_URL!)
   .then(() => {
     console.log(`Listening on Port:${PORT}`);
     app.listen(PORT);
