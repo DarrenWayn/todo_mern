@@ -19,7 +19,7 @@ app.get("/decks", async (req: Request, res: Response) => {
   // Tpdp: fetch all decks and send back to the use
   // 1. how do we fetch the decks from mongo?
   const decks = await Deck.find();
-  console.log(decks);
+  /* console.log(decks); */
   // 2. how do we send back the array to the ui?
   res.json(decks);
 });
