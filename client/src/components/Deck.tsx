@@ -4,9 +4,10 @@ import createCard from "../api/createCard";
 import deleteCard from "../api/deleteCard";
 import getDeck from "../api/getDeck";
 import { TDeck } from "../api/getDecks";
+import "./Deck.css";
 
 export default function Deck() {
-  const [_, setDeck] = useState<TDeck | undefined>();
+  const [deck, setDeck] = useState<TDeck | undefined>();
   const [cards, setCards] = useState<string[]>([]);
   const [text, setText] = useState("");
   let { deckId } = useParams();
@@ -25,17 +26,18 @@ export default function Deck() {
   };
 
   useEffect(() => {
-    if (!deckId) return;
     (async () => {
+      if (!deckId) return;
       const newDeck = await getDeck(deckId);
       setDeck(newDeck);
-      setCards(newDeck.cards);
+      setCards(newDeck?.cards);
     })();
   }, [deckId]);
 
   return (
-    <div className="App">
-      <ul className="decks">
+    <div className="Deck">
+      <h1>{deck?.title}</h1>
+      <ul className="cards">
         {cards.map((card, index) => (
           <li key={index}>
             <button onClick={() => handleDeleteCard(index)}>X</button>
@@ -48,6 +50,7 @@ export default function Deck() {
         <input
           id="deck-title"
           value={text}
+          required
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setText(e.target.value);
           }}
