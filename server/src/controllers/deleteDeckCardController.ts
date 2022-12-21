@@ -8,10 +8,7 @@ const deleteDeckCardController = async (req: Request, res: Response) => {
   if (!deck) return res.status(400).send("no deck of this id exists");
   deck.cards.splice(parseInt(index), 1);
   await deck.save();
-  res.json({
-    deck,
-    message: "succesfully deleted the entry",
-  });
+  res.json(deck);
 };
 
 export default deleteDeckCardController;
